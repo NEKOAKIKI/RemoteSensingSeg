@@ -1,0 +1,27 @@
+{% extends 'home.html' %}
+
+{% block container %}
+    <div class="margin-top user-update">
+        <el-form :model="userUpdate" :rules="userRules">
+            {% csrf_token %}
+            <el-form-item label="姓名" prop="userName">
+                <el-input prop="name" v-model="userUpdate.userName" placeholder="请输入姓名"></el-input>
+            </el-form-item>
+            <el-form-item label="性别" prop="userSex">
+                <el-input v-model="userUpdate.userSex" placeholder="请输入性别"></el-input>
+            </el-form-item>
+            <el-form-item label="年龄" prop="age">
+                <el-input v-model="userUpdate.age" placeholder="请输入年龄"></el-input>
+            </el-form-item>
+            <el-form-item label="手机号" prop="phone">
+                <el-input v-model="userUpdate.phone" placeholder="请输入手机号"></el-input>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button @click="updateUser('{{ request.user.nid }}')" type="primary"><span
+                        style="color:#fff">提交</span></el-button>
+            </el-form-item>
+        </el-form>
+    </div>
+
+{% endblock %}

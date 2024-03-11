@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>遥感地块分割系统</title>
+    <link rel="stylesheet" href="../static/elementui/theme-chalk/index.css" />
+    
+    <link rel="stylesheet" href="../static/css/home.css" />
+    
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,700"
+      rel="stylesheet"
+    />
+
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="../static/css/animate.css" />
+    <!-- Icomoon Icon Fonts-->
+    <link rel="stylesheet" href="../static/css/icomoon.css" />
+    <!-- Themify Icons-->
+    <link rel="stylesheet" href="../static/css/themify-icons.css" />
+    <!-- Bootstrap  -->
+    <link rel="stylesheet" href="../static/css/bootstrap.css" />
+
+    <!-- Magnific Popup -->
+    <link rel="stylesheet" href="../static/css/magnific-popup.css" />
+
+    <!-- Owl Carousel  -->
+    <link rel="stylesheet" href="../static/css/owl.carousel.min.css" />
+    <link rel="stylesheet" href="../static/css/owl.theme.default.min.css" />
+
+    <!-- Theme style  -->
+    <link rel="stylesheet" href="../static/css/style.css" />
+
+    <!-- Modernizr JS -->
+    <script src="../static/js/modernizr-2.6.2.min.js"></script>
+    <!-- FOR IE9 below -->
+    <!--[if lt IE 9]>
+      <script src="../static/js/respond.min.js"></script>
+    <![endif]-->
+    <style>
+      .margin-top {
+        margin-top: 100px;
+      }
+
+      .el-descriptions__title {
+        color: #fff;
+      }
+
+      .user-update {
+        height: 100%;
+        background-color: #fff;
+        padding: 20px;
+      }
+    </style>
+
+    {% block style %} {% endblock %}
+  </head>
+  <body>
+    <div id="app">
+      <div
+        id="page"
+        style="
+          background-image: url('../static/img/img_1.jpg');
+          background-repeat: no-repeat;
+          background-size: 100%;
+        "
+      >
+        {% csrf_token %}
+
+        <div class="page-inner">
+          <nav class="gtco-nav" role="navigation">
+            <div class="gtco-container">
+              <div class="row">
+                <div class="col-sm-4 col-xs-12">
+                  <div id="gtco-logo">
+                    <a href="#">RS-Seg System<em>.</em></a>
+                  </div>
+                </div>
+                <div class="col-xs-8 text-right menu-1">
+                  <ul>
+                    {% if request.user.is_staff%}
+                    <li><a href="/home">用户列表</a></li>
+                    {% endif %}
+                    {% if not user_info.name %}
+                    <li><a href="/userlur">个人信息</a></li>
+                    {% else %}
+                    <li><a href="/userinfo">个人信息</a></li>
+                    {% endif %}
+                    <li><a href="/upload">遥感地块分割</a></li>
+                    <li><a href="/record">分割记录</a></li>
+                    <!-- 后台入口 -->
+                    <li><a href="/admin">管理员登录</a></li>
+                    <li class="btn-cta">
+                      <a href="/logout"><span>注销登录</span></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </nav>
+
+          <header id="gtco-header" class="gtco-cover" role="banner">
+            <div class="overlay"></div>
+            <div class="gtco-container">
+              {% block container %}
+              <el-descriptions class="margin-top" :column="6" border>
+                <template slot="title">
+                  <div style="font-size: 18px; color: #fff; font-weight: bold">
+                    用户信息管理
+                  </div>
+                </template>
+                {% for user in user_list %}
+                <el-descriptions-item>
+                  <template slot="label">
+                    <i class="el-icon-user"></i>
+                    姓名
+                  </template>
+                  {{ user.name }}
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    <i class="el-icon-mobile-phone"></i>
+                    手机号
+                  </template>
+                  {{ user.tel }}
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    <i class="el-icon-location-outline"></i>
+                    性别
+                  </template>
+                  {{ user.sex }}
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    <i class="el-icon-location-outline"></i>
+                    用户名
+                  </template>
+                  {{ user.username }}
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    <i class="el-icon-tickets"></i>
+                    年龄
+                  </template>
+                  <el-tag size="small">{{ user.age }}</el-tag>
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    <i class="el-icon-office-building"></i>
+                    操作
+                  </template>
+                  {% if request.user.is_staff%}
+                  <el-button
+                    type="primary"
+                    size="small"
+                    @click="updateUserInfo('{{ user.nid }}')"
+                    style="margin-left: 20px"
+                    ><span style="color: #fff">修改</span>
+                  </el-button>
+                  <el-button
+                    type="danger"
+                    size="small"
+                    @click="deleteUser(`{{ user.nid }}`)"
+                    ><span style="color: #fff">删除</span>
+                  </el-button>
+                  {% endif %}
+                </el-descriptions-item>
+
+                {% endfor %}
+              </el-descriptions>
+              {% endblock %}
+            </div>
+          </header>
+        </div>
+        <footer id="gtco-footer" role="contentinfo">
+            基于深度学习的遥感图像地块分割系统<br />
+            联系我们：13xxxxxxxxx<br />
+            <img style="width: 5%; height: 5%; margin: 1em" src="\static\img\qrcode.jpg" alt="qrcode" /><br />
+            ©Copyright Xxxxxxx
+        </footer>
+      </div>
+    </div>
+
+    <script src="/static/vue/vue.js"></script>
+    <script src="/static/elementui/index.js"></script>
+    <script src="/static/axios/axios.min.js"></script>
+    <!-- jQuery -->
+    <script src="/static/js/jquery.min.js"></script>
+    <!-- jQuery Easing -->
+    <script src="/static/js/jquery.easing.1.3.js"></script>
+    <!-- Bootstrap -->
+    <script src="/static/js/bootstrap.min.js"></script>
+    <!-- Waypoints -->
+    <script src="/static/js/jquery.waypoints.min.js"></script>
+    <!-- Carousel -->
+    <script src="/static/js/owl.carousel.min.js"></script>
+    <!-- countTo -->
+    <script src="/static/js/jquery.countTo.js"></script>
+    <!-- Magnific Popup -->
+    <script src="/static/js/jquery.magnific-popup.min.js"></script>
+    <script src="/static/js/magnific-popup-options.js"></script>
+    <!-- Main -->
+    <script src="/static/js/main.js"></script>
+
+    <script>
+      axios.interceptors.request.use((request) => {
+        if (request.method === "post") {
+          let csrf_token = document.querySelector(
+            'input[name = "csrfmiddlewaretoken"]'
+          ).value;
+          request.headers["X-CSRFToken"] = csrf_token;
+        }
+        return request;
+      });
+      axios.interceptors.response.use((response) => {
+        return response.data;
+      });
+
+      new Vue({
+        el: "#app",
+        delimiters: ["[[", "]]"],
+        data() {
+          return {
+            userForm: {
+              userName: "",
+              userNum: "",
+              userNation: "",
+              userId: "",
+            },
+
+            userUpdate: {
+              nid: 1,
+              userName: "",
+              userSex: "",
+              age: "",
+              phone: "",
+            },
+
+            userRules: {
+              userName: [
+                { required: true, message: "请输入姓名", trigger: "blur" },
+              ],
+
+              userSex: [
+                { required: true, message: "请输入性别", trigger: "blur" },
+              ],
+
+              age: [{ required: true, message: "请输入年龄", trigger: "blur" }],
+
+              phone: [
+                { required: true, message: "请输入手机号", trigger: "blur" },
+              ],
+            },
+            search: "",
+            avatar_list_headers: {},
+            imageUrl: "",
+            uploadForm: {
+              avatar_id: 1,
+              weight_id: 1,
+              model_name: "",
+            },
+            dialogVisible: false,
+            resultUrl: "",
+            searchValue: "",
+            recommendValue: "",
+            result: "",
+          };
+        },
+        methods: {
+          onSuccess(res) {
+            console.log(res.data);
+            this.result = res.data;
+          },
+
+          deleteUser(nid) {
+            this.$confirm("此操作将永久删除该用户, 是否继续?", "提示", {
+              confirmButtonText: "确定",
+              cancelButtonText: "取消",
+              type: "warning",
+            })
+              .then(() => {
+                axios
+                  .delete(`/api/userlur/`, {
+                    data: { nid },
+                  })
+                  .then((res) => {
+                    if (res.code !== 200) {
+                      this.$message.error(res.msg);
+                      return;
+                    }
+                    this.$message.success(res.msg);
+                    setTimeout(() => {
+                      location.reload();
+                    }, 1500);
+                  });
+              })
+              .catch(() => {
+                this.$message({
+                  type: "info",
+                  message: "取消删除",
+                });
+              });
+          },
+
+          updateUserInfo(nid) {
+            window.open("/userupdate?nid=" + nid);
+          },
+
+          updateUser(nid) {
+            this.userUpdate.nid = nid;
+            axios.put(`/api/userlur/`, this.userUpdate).then((res) => {
+              if (res.code !== 200) {
+                this.$message.error(res.msg);
+                return;
+              }
+              this.$message.success(res.msg);
+              setTimeout(() => {
+                location.href = "/userinfo";
+              }, 1000);
+            });
+          },
+
+          deleteRecord(nid) {
+            this.$confirm("此操作将永久删除该条记录, 是否继续?", "提示", {
+              confirmButtonText: "确定",
+              cancelButtonText: "取消",
+              type: "warning",
+            })
+              .then(() => {
+                axios
+                  .delete(`/api/recorddel/`, {
+                    data: { nid },
+                  })
+                  .then((res) => {
+                    if (res.code !== 200) {
+                      this.$message.error(res.msg);
+                      return;
+                    }
+                    this.$message.success(res.msg);
+                    setTimeout(() => {
+                      location.reload();
+                    }, 1500);
+                  });
+              })
+              .catch(() => {
+                this.$message({
+                  type: "info",
+                  message: "取消删除",
+                });
+              });
+          },
+
+          toDetails(nid) {
+            location.href = `/details/${nid}`;
+          },
+
+          searchButton() {
+            location.href = `/upload?search=${this.searchValue}&recommend=${this.recommendValue}`;
+          },
+
+          resetButton() {
+            location.href = `/upload`;
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

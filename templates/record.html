@@ -1,0 +1,58 @@
+{% extends 'home.html' %} {% block container %}
+
+<el-descriptions class="margin-top" direction="vertical" :column="6" border>
+  <template slot="title">
+    <div style="font-size: 18px; color: #fff; font-weight: bold;">
+      历史分割记录 (最近7条)
+    </div>
+  </template>
+  {% for record in record_list %}
+  <el-descriptions-item>{{ record.nid }}</el-descriptions-item>
+  <el-descriptions-item>
+    <template slot="label">
+      <i class="el-icon-user"></i>
+      用户
+    </template>
+    {{ record.user }}
+  </el-descriptions-item>
+  <el-descriptions-item>
+    <template slot="label">
+      <i class="el-icon-picture-outline"></i>
+      图片
+    </template>
+    {{ record.avatars }}
+  </el-descriptions-item>
+  <el-descriptions-item>
+    <template slot="label">
+      <i class="el-icon-document-checked"></i>
+      分割结果
+    </template>
+    <el-button
+      type="primary"
+      size="small"
+      ><a style="color: #fff" href="{{ record.result_url }}" download>下载</a>
+    </el-button>
+  </el-descriptions-item>
+  <el-descriptions-item>
+    <template slot="label">
+      <i class="el-icon-time"></i>
+      创建时间
+    </template>
+    {{ record.create_date }}
+  </el-descriptions-item>
+  <el-descriptions-item>
+    <template slot="label">
+      <i class="el-icon-setting"></i>
+      操作
+    </template>
+    <el-button
+      type="danger"
+      size="small"
+      @click="deleteRecord(`{{ record.nid }}`)"
+      ><span style="color: #fff">删除</span>
+    </el-button>
+  </el-descriptions-item>
+  {% endfor %}
+</el-descriptions>
+
+{% endblock %}

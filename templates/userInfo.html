@@ -1,0 +1,26 @@
+{% extends 'home.html' %} {% block container %}
+
+<el-descriptions class="margin-top" direction="vertical" :column="7" border>
+  <template slot="title">
+    <div style="font-size: 18px; color: #fff; font-weight: bold">个人信息</div>
+  </template>
+  <el-descriptions-item label="用户名">
+    {{ request.user.username }}
+    </el-descriptions-item>
+  <el-descriptions-item label="手机号">{{ user_info.tel}}</el-descriptions-item>
+  <el-descriptions-item label="姓名" :span="2">
+    {{ user_info.name }}
+  </el-descriptions-item>
+  <el-descriptions-item label="性别">
+    <el-tag size="small">{{ user_info.sex }}</el-tag>
+  </el-descriptions-item>
+  <el-descriptions-item label="年龄">{{ user_info.age }}</el-descriptions-item>
+  <el-descriptions-item label="">
+    <el-button
+      type="primary"
+      @click="updateUserInfo('{{ request.user.nid }}')">
+      <span style="color: #fff">修改个人信息</span>
+    </el-button>
+  </el-descriptions-item>
+</el-descriptions>
+{% endblock %}

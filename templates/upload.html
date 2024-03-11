@@ -1,0 +1,35 @@
+{% extends 'home.html' %} {% block style %}
+<style>
+  input.el-upload__input {
+      display: none; !important;
+  }
+
+  img {
+      width: 700px;
+  }
+</style>
+{% endblock %} {% block container %}
+<el-card style="margin-top: 80px">
+  <div style="text-align: center">
+    <el-upload
+      class="upload-demo"
+      drag
+      action="/api/file/"
+      :on-success="onSuccess"
+      multiple
+    >
+      <i class="el-icon-upload"></i>
+      <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+      <div class="el-upload__tip" slot="tip">
+        只能上传jpg/png文件, 且不超过500kb
+      </div>
+    </el-upload>
+  </div>
+</el-card>
+
+<el-card v-if="result" style="margin-top: 20px">
+  <div style="text-align: center; height: 400px">
+    <img ref="res" :src="result" alt="" />
+  </div>
+</el-card>
+{% endblock %}
